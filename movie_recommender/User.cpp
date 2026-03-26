@@ -55,7 +55,7 @@ bool User::isValidEmail(const string &targetEmail) const
   return targetEmail.find('@') != string::npos;
 }
 
-// 정보 출력 메서드
+// 정보 출력
 void User::display() const
 {
   cout << "[User " << id << "] Name: " << name

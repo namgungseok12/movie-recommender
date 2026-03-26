@@ -26,7 +26,7 @@ int main()
   users[1].setEmail("namgungseok.ssu.ac.kr"); // ❌ 오류
   users[2].setEmail("leesunshin@gmail.com");  // 정상 변경
 
-  // 3. 평점 데이터 추가 및 유효성 검사 
+  // 3. 평점 데이터 추가 및 유효성 검사
   ratings.emplace_back(101, 1, 4.8);
   ratings.emplace_back(101, 2, 5.0);
   ratings.emplace_back(102, 1, 6.5); // 잘못된 평점 테스트 (경고 발생 후 0.0 설정)

@@ -1,9 +1,5 @@
 #include <iostream>
-#include <vector>
-#include <string>
 #include "Movie.h"
-#include "User.h"
-#include "Rating.h"
 #include "MovieManager.h"
 
 using namespace std;
@@ -12,18 +8,21 @@ int main()
 {
   MovieManager movieManager;
 
-  vector<User> users;
-  vector<Rating> ratings;
-
   Movie m1(1, "인셉션", "SF", 2010);
   Movie m2(2, "기생충", "드라마", 2019);
+  Movie m3(3, "인터스텔라", "SF", 2014);
 
   m1.addRating(4.8);
-  m1.addRating(4.5);
-  m2.addRating(5.0);
+  m1.addRating(4.5); // 평균 4.65
+
+  m2.addRating(5.0); // 평균 5.0
+
+  m3.addRating(4.2);
+  m3.addRating(4.4); // 평균 4.3
 
   movieManager.addMovie(m1);
   movieManager.addMovie(m2);
+  movieManager.addMovie(m3);
 
   cout << "\n--- [정렬 전 영화 목록] ---" << endl;
   movieManager.printAll();

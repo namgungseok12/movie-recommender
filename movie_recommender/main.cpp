@@ -15,21 +15,22 @@ int main()
   vector<User> users;
   vector<Rating> ratings;
 
-  movieManager.addMovie(Movie(1, "인셉션", "SF", 2010));
-  movieManager.addMovie(Movie(2, "기생충", "드라마", 2019));
+  Movie m1(1, "인셉션", "SF", 2010);
+  Movie m2(2, "기생충", "드라마", 2019);
 
-  users.emplace_back(101, "남궁석", "nam@gmail.com");
-  users.emplace_back(102, "홍길동", "hong.ssu.ac.kr");
-  users.emplace_back(103, "이순신", "lee@gmail.com");
+  m1.addRating(4.8);
+  m1.addRating(4.5);
+  m2.addRating(5.0);
 
-  users[1].setEmail("namgungseok.ssu.ac.kr");
-  users[2].setEmail("leesunshin@gmail.com");
+  movieManager.addMovie(m1);
+  movieManager.addMovie(m2);
 
-  ratings.emplace_back(101, 1, 4.8);
-  ratings.emplace_back(101, 2, 5.0);
-  ratings.emplace_back(102, 1, 6.5);
+  cout << "\n--- [정렬 전 영화 목록] ---" << endl;
+  movieManager.printAll();
 
-  cout << "\n--- [영화 목록] ---" << endl;
+  movieManager.sortByRating();
+
+  cout << "\n--- [평점순 정렬 후 영화 목록] ---" << endl;
   movieManager.printAll();
 
   cout << "\n--- [제목 검색 테스트] ---" << endl;

@@ -32,5 +32,16 @@ int main()
   cout << "\n--- [영화 목록] ---" << endl;
   movieManager.printAll();
 
+  cout << "\n--- [제목 검색 테스트] ---" << endl;
+  Movie *found = movieManager.findByTitle("인셉션");
+  if (found != nullptr)
+  {
+    found->display();
+  }
+  else
+  {
+    cout << "영화를 찾을 수 없습니다." << endl;
+  }
+
   return 0;
 }

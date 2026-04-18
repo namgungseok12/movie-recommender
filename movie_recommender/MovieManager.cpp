@@ -1,14 +1,26 @@
 #include "MovieManager.h"
 
-void MovieManager::addMovie(const Movie& movie)
+void MovieManager::addMovie(const Movie &movie)
 {
-    movies.push_back(movie);
+  movies.push_back(movie);
+}
+
+Movie *MovieManager::findByTitle(const std::string &title)
+{
+  for (Movie &movie : movies)
+  {
+    if (movie.getTitle() == title)
+    {
+      return &movie;
+    }
+  }
+  return nullptr;
 }
 
 void MovieManager::printAll() const
 {
-    for (const Movie& movie : movies)
-    {
-        movie.display();
-    }
+  for (const Movie &movie : movies)
+  {
+    movie.display();
+  }
 }

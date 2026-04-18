@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "Movie.h"
 
 class MovieManager
@@ -9,5 +10,6 @@ private:
 
 public:
   void addMovie(const Movie &movie);
+  Movie *findByTitle(const std::string &title);
   void printAll() const;
 };

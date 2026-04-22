@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include "Movie.h"
@@ -13,4 +14,5 @@ public:
   Movie *findByTitle(const std::string &title);
   void sortByRating();
   void printAll() const;
+  void printSortedByRating() const;
 };

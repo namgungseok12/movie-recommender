@@ -68,7 +68,7 @@ int main()
       cout << "개봉 연도 입력: ";
       cin >> year;
 
-      cout << "초기 평점 1개 입력 (0.0 ~ 5.0): ";
+      cout << "평점 입력 (0.0 ~ 5.0): ";
       cin >> initialScore;
 
       Movie movie(nextMovieId, title, genre, year);
@@ -113,9 +113,8 @@ int main()
 
     case 4:
     {
-      movieManager.sortByRating();
       cout << "\n--- [평점순 정렬 영화 목록] ---" << endl;
-      movieManager.printAll();
+      movieManager.printSortedByRating();
       break;
     }
 

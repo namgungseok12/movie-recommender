@@ -1,12 +1,15 @@
 #include "MovieManager.h"
+#include <iostream>
 #include <algorithm>
+
+using namespace std;
 
 void MovieManager::addMovie(const Movie &movie)
 {
   movies.push_back(movie);
 }
 
-Movie *MovieManager::findByTitle(const std::string &title)
+Movie *MovieManager::findByTitle(const string &title)
 {
   for (Movie &movie : movies)
   {
@@ -21,20 +24,52 @@ Movie *MovieManager::findByTitle(const std::string &title)
 
 void MovieManager::sortByRating()
 {
-  std::sort(movies.begin(), movies.end(),
-            [](const Movie &a, const Movie &b)
-            {
-              if (a.getAverageRating() != b.getAverageRating())
-              {
-                return a.getAverageRating() > b.getAverageRating();
-              }
-              return a.getTitle() < b.getTitle();
-            });
+  sort(movies.begin(), movies.end(),
+       [](const Movie &a, const Movie &b)
+       {
+         if (a.getAverageRating() != b.getAverageRating())
+         {
+           return a.getAverageRating() > b.getAverageRating();
+         }
+         return a.getTitle() < b.getTitle();
+       });
 }
 
 void MovieManager::printAll() const
 {
+  if (movies.empty())
+  {
+    cout << "등록된 영화가 없습니다." << endl;
+    return;
+  }
+
   for (const Movie &movie : movies)
+  {
+    movie.display();
+  }
+}
+
+void MovieManager::printSortedByRating() const
+{
+  if (movies.empty())
+  {
+    cout << "등록된 영화가 없습니다." << endl;
+    return;
+  }
+
+  vector<Movie> sortedMovies = movies;
+
+  sort(sortedMovies.begin(), sortedMovies.end(),
+       [](const Movie &a, const Movie &b)
+       {
+         if (a.getAverageRating() != b.getAverageRating())
+         {
+           return a.getAverageRating() > b.getAverageRating();
+         }
+         return a.getTitle() < b.getTitle();
+       });
+
+  for (const Movie &movie : sortedMovies)
   {
     movie.display();
   }

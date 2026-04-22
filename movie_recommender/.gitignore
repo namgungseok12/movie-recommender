@@ -4,4 +4,4 @@
 *.dylib
 *.exe
 *.out
-/build/movie_recommender
+movie_recommender

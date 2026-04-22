@@ -1,34 +1,26 @@
 #pragma once
 #include <string>
-
-using namespace std;
+#include <iostream>
 
 class User
 {
 private:
-  int id;       // 사용자 ID
-  string name;  // 이름
-  string email; // 이메일
+  int id;
+  std::string name;
+  std::string email;
 
 public:
-  // 기본 생성자
   User();
+  User(int uId, const std::string &uName, const std::string &uEmail);
 
-  // 매개변수 생성자 (이메일 유효성 검사 포함)
-  User(int uId, const string &uName, const string &uEmail);
-
-  // Getter (조회용, const 필수)
   int getId() const;
-  string getName() const;
-  string getEmail() const;
+  std::string getName() const;
+  std::string getEmail() const;
 
-  // Setter (이름과 이메일 수정)
-  void setName(const string &uName);
-  void setEmail(const string &uEmail);
+  void setName(const std::string &uName);
+  void setEmail(const std::string &uEmail);
 
-  // 유효성 검사 로직
-  bool isValidEmail(const string &targetEmail) const;
+  static bool isValidEmail(const std::string &targetEmail);
 
-  // 정보 출력
-  void display() const;
+  friend std::ostream &operator<<(std::ostream &os, const User &user);
 };

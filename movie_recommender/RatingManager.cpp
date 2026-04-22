@@ -5,67 +5,73 @@ using namespace std;
 
 void RatingManager::addRating(const Rating &rating)
 {
-  ratings.push_back(rating);
+    ratings.push_back(rating);
 }
 
 void RatingManager::printAll() const
 {
-  for (const Rating &rating : ratings)
-  {
-    rating.display();
-  }
+    if (ratings.empty())
+    {
+        cout << "등록된 평점이 없습니다." << endl;
+        return;
+    }
+
+    for (const Rating &rating : ratings)
+    {
+        cout << rating << endl;
+    }
 }
 
 void RatingManager::printRatingsByMovieId(int movieId) const
 {
-  bool found = false;
+    bool found = false;
 
-  for (const Rating &rating : ratings)
-  {
-    if (rating.getMovieId() == movieId)
+    for (const Rating &rating : ratings)
     {
-      rating.display();
-      found = true;
+        if (rating.getMovieId() == movieId)
+        {
+            cout << rating << endl;
+            found = true;
+        }
     }
-  }
 
-  if (!found)
-  {
-    cout << "해당 영화에 대한 평점이 없습니다." << endl;
-  }
+    if (!found)
+    {
+        cout << "해당 영화에 대한 평점이 없습니다." << endl;
+    }
 }
 
 double RatingManager::getAverageRatingByMovieId(int movieId) const
 {
-  double total = 0.0;
-  int count = 0;
+    double total = 0.0;
+    int count = 0;
 
-  for (const Rating &rating : ratings)
-  {
-    if (rating.getMovieId() == movieId)
+    for (const Rating &rating : ratings)
     {
-      total += rating.getScore();
-      count++;
+        if (rating.getMovieId() == movieId)
+        {
+            total += rating.getScore();
+            count++;
+        }
     }
-  }
 
-  if (count == 0)
-  {
-    return 0.0;
-  }
+    if (count == 0)
+    {
+        return 0.0;
+    }
 
-  return total / count;
+    return total / count;
 }
 
 bool RatingManager::hasRating(int userId, int movieId) const
 {
-  for (const Rating &rating : ratings)
-  {
-    if (rating.getUserId() == userId && rating.getMovieId() == movieId)
+    for (const Rating &rating : ratings)
     {
-      return true;
+        if (rating.getUserId() == userId && rating.getMovieId() == movieId)
+        {
+            return true;
+        }
     }
-  }
 
-  return false;
+    return false;
 }

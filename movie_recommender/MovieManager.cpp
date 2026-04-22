@@ -24,15 +24,7 @@ Movie *MovieManager::findByTitle(const string &title)
 
 void MovieManager::sortByRating()
 {
-  sort(movies.begin(), movies.end(),
-       [](const Movie &a, const Movie &b)
-       {
-         if (a.getAverageRating() != b.getAverageRating())
-         {
-           return a.getAverageRating() > b.getAverageRating();
-         }
-         return a.getTitle() < b.getTitle();
-       });
+  sort(movies.begin(), movies.end());
 }
 
 void MovieManager::printAll() const
@@ -45,7 +37,7 @@ void MovieManager::printAll() const
 
   for (const Movie &movie : movies)
   {
-    movie.display();
+    cout << movie << endl;
   }
 }
 
@@ -71,6 +63,6 @@ void MovieManager::printSortedByRating() const
 
   for (const Movie &movie : sortedMovies)
   {
-    movie.display();
+    cout << movie << endl;
   }
 }

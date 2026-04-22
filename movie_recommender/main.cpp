@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Movie.h"
 #include "MovieManager.h"
 #include "User.h"
@@ -15,6 +16,7 @@ int main()
   RatingManager ratingManager;
 
   int choice = -1;
+  int nextUserId = 1;
 
   do
   {
@@ -53,12 +55,32 @@ int main()
       break;
 
     case 5:
-      cout << "아직 구현되지 않았습니다." << endl;
+    {
+      string name;
+      string email;
+
+      cin.ignore();
+
+      cout << "사용자 이름 입력: ";
+      getline(cin, name);
+
+      cout << "이메일 입력: ";
+      getline(cin, email);
+
+      User user(nextUserId, name, email);
+      userManager.addUser(user);
+
+      cout << "사용자가 추가되었습니다. [ID: " << nextUserId << "]" << endl;
+      nextUserId++;
       break;
+    }
 
     case 6:
-      cout << "아직 구현되지 않았습니다." << endl;
+    {
+      cout << "\n--- [사용자 목록] ---" << endl;
+      userManager.printAll();
       break;
+    }
 
     case 7:
       cout << "아직 구현되지 않았습니다." << endl;

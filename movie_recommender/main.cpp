@@ -14,87 +14,70 @@ int main()
   UserManager userManager;
   RatingManager ratingManager;
 
-  // 영화 생성
-  Movie m1(1, "인셉션", "SF", 2010);
-  Movie m2(2, "기생충", "드라마", 2019);
-  Movie m3(3, "인터스텔라", "SF", 2014);
+  int choice = -1;
 
-  // 영화에 평점 추가
-  m1.addRating(4.8);
-  m1.addRating(4.5);
-
-  m2.addRating(5.0);
-
-  m3.addRating(4.2);
-  m3.addRating(4.4);
-
-  // MovieManager 테스트
-  movieManager.addMovie(m1);
-  movieManager.addMovie(m2);
-  movieManager.addMovie(m3);
-
-  cout << "\n--- [정렬 전 영화 목록] ---" << endl;
-  movieManager.printAll();
-
-  movieManager.sortByRating();
-
-  cout << "\n--- [평점순 정렬 후 영화 목록] ---" << endl;
-  movieManager.printAll();
-
-  cout << "\n--- [제목 검색 테스트] ---" << endl;
-  Movie *foundMovie = movieManager.findByTitle("인셉션");
-  if (foundMovie != nullptr)
+  do
   {
-    foundMovie->display();
-  }
-  else
-  {
-    cout << "영화를 찾을 수 없습니다." << endl;
-  }
+    cout << "\n=== Movie Recommender ===" << endl;
+    cout << "[ 영화 ]" << endl;
+    cout << "1. 영화 추가" << endl;
+    cout << "2. 제목으로 검색" << endl;
+    cout << "3. 전체 목록 출력" << endl;
+    cout << "4. 평점순 정렬 출력" << endl;
+    cout << "[ 사용자 ]" << endl;
+    cout << "5. 사용자 추가" << endl;
+    cout << "6. 사용자 목록 출력" << endl;
+    cout << "[ 평점 ]" << endl;
+    cout << "7. 평점 입력" << endl;
+    cout << "8. 영화별 평점 보기" << endl;
+    cout << "0. 종료" << endl;
+    cout << "선택 > ";
+    cin >> choice;
 
-  // UserManager 테스트
-  userManager.addUser(User(101, "남궁석", "nam@gmail.com"));
-  userManager.addUser(User(102, "홍길동", "hong.ssu.ac.kr"));
-  userManager.addUser(User(103, "이순신", "lee@gmail.com"));
+    switch (choice)
+    {
+    case 1:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n--- [사용자 목록] ---" << endl;
-  userManager.printAll();
+    case 2:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n--- [이름 검색 테스트] ---" << endl;
-  User *foundUser = userManager.findByName("이순신");
-  if (foundUser != nullptr)
-  {
-    foundUser->display();
-  }
-  else
-  {
-    cout << "사용자를 찾을 수 없습니다." << endl;
-  }
+    case 3:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  // RatingManager 테스트
-  ratingManager.addRating(Rating(101, 1, 4.5));
-  ratingManager.addRating(Rating(103, 1, 5.0));
-  ratingManager.addRating(Rating(101, 2, 4.0));
-  ratingManager.addRating(Rating(103, 3, 4.8));
+    case 4:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n--- [전체 평점 목록] ---" << endl;
-  ratingManager.printAll();
+    case 5:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n--- [영화 ID 1의 평점 목록] ---" << endl;
-  ratingManager.printRatingsByMovieId(1);
+    case 6:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n영화 ID 1 평균 평점: "
-       << ratingManager.getAverageRatingByMovieId(1) << endl;
+    case 7:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
 
-  cout << "\n--- [중복 평점 검사 테스트] ---" << endl;
-  if (ratingManager.hasRating(101, 1))
-  {
-    cout << "사용자 101은 이미 영화 1에 평점을 남겼습니다." << endl;
-  }
-  else
-  {
-    cout << "사용자 101은 영화 1에 아직 평점을 남기지 않았습니다." << endl;
-  }
+    case 8:
+      cout << "아직 구현되지 않았습니다." << endl;
+      break;
+
+    case 0:
+      cout << "프로그램을 종료합니다." << endl;
+      break;
+
+    default:
+      cout << "올바른 번호를 입력하세요." << endl;
+      break;
+    }
+
+  } while (choice != 0);
 
   return 0;
 }

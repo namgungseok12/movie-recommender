@@ -7,12 +7,15 @@
 class MovieManager
 {
 private:
-  std::vector<Movie> movies;
+    std::vector<Movie> movies;
+    int nextMovieId;
 
 public:
-  bool addMovie(const Movie &movie);
-  Movie *findByTitle(const std::string &title);
-  void sortByRating();
-  void printAll() const;
-  void printSortedByRating() const;
+    MovieManager();
+
+    int addMovie(const std::string &title, const std::string &genre, int year, double initialScore);
+    Movie *findByTitle(const std::string &title);
+    void sortByRating();
+    void printAll() const;
+    void printSortedByRating() const;
 };

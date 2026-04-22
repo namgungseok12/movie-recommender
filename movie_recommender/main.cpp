@@ -15,8 +15,6 @@ int main()
   RatingManager ratingManager;
 
   int choice = -1;
-  int nextUserId = 1;
-  int nextMovieId = 1;
 
   do
   {
@@ -110,19 +108,16 @@ int main()
         break;
       }
 
-      Movie movie(nextMovieId, title, genre, year);
-      movie.addRating(initialScore);
-
-      if (!movieManager.addMovie(movie))
+      int movieId = movieManager.addMovie(title, genre, year, initialScore);
+      if (movieId == -1)
       {
         break;
       }
 
-      Rating rating(foundUser->getId(), nextMovieId, initialScore);
+      Rating rating(foundUser->getId(), movieId, initialScore);
       ratingManager.addRating(rating);
 
-      cout << "영화가 추가되었습니다. [ID: " << nextMovieId << "]" << endl;
-      nextMovieId++;
+      cout << "영화가 추가되었습니다. [ID: " << movieId << "]" << endl;
       break;
     }
 
@@ -180,11 +175,8 @@ int main()
         break;
       }
 
-      User user(nextUserId, name, email);
-      userManager.addUser(user);
-
-      cout << "사용자가 추가되었습니다. [ID: " << nextUserId << "]" << endl;
-      nextUserId++;
+      int userId = userManager.addUser(name, email);
+      cout << "사용자가 추가되었습니다. [ID: " << userId << "]" << endl;
       break;
     }
 

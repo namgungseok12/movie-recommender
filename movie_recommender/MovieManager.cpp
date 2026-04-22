@@ -15,12 +15,21 @@ Movie *MovieManager::findByTitle(const std::string &title)
       return &movie;
     }
   }
+
   return nullptr;
 }
 
 void MovieManager::sortByRating()
 {
-  std::sort(movies.begin(), movies.end());
+  std::sort(movies.begin(), movies.end(),
+            [](const Movie &a, const Movie &b)
+            {
+              if (a.getAverageRating() != b.getAverageRating())
+              {
+                return a.getAverageRating() > b.getAverageRating();
+              }
+              return a.getTitle() < b.getTitle();
+            });
 }
 
 void MovieManager::printAll() const

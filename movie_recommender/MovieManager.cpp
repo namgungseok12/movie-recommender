@@ -4,9 +4,19 @@
 
 using namespace std;
 
-void MovieManager::addMovie(const Movie &movie)
+bool MovieManager::addMovie(const Movie &movie)
 {
+  for (const Movie &m : movies)
+  {
+    if (m == movie)
+    {
+      cout << "이미 같은 제목의 영화가 존재합니다. 추가되지 않았습니다." << endl;
+      return false;
+    }
+  }
+
   movies.push_back(movie);
+  return true;
 }
 
 Movie *MovieManager::findByTitle(const string &title)

@@ -55,6 +55,16 @@ void Movie::addRating(double r)
   ratingCount++;
 }
 
+bool Movie::operator==(const Movie &other) const
+{
+  return title == other.title;
+}
+
+bool Movie::operator!=(const Movie &other) const
+{
+  return !(*this == other);
+}
+
 bool Movie::operator<(const Movie &other) const
 {
   if (getAverageRating() != other.getAverageRating())

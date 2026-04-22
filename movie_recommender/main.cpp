@@ -112,7 +112,11 @@ int main()
 
       Movie movie(nextMovieId, title, genre, year);
       movie.addRating(initialScore);
-      movieManager.addMovie(movie);
+
+      if (!movieManager.addMovie(movie))
+      {
+        break;
+      }
 
       Rating rating(foundUser->getId(), nextMovieId, initialScore);
       ratingManager.addRating(rating);

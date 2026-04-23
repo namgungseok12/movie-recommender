@@ -12,44 +12,44 @@ Movie::Movie(int id, const std::string &title, const std::string &genre, int yea
 
 int Movie::getId() const
 {
-    return id;
+  return id;
 }
 
 std::string Movie::getTitle() const
 {
-    return title;
+  return title;
 }
 
 std::string Movie::getGenre() const
 {
-    return genre;
+  return genre;
 }
 
 int Movie::getReleaseYear() const
 {
-    return releaseYear;
+  return releaseYear;
 }
 
 bool Movie::isValidYear(int year)
 {
-    return year >= 1888 && year <= 2100;
+  return year >= 1888 && year <= 2100;
 }
 
 bool Movie::operator==(const Movie &other) const
 {
-    return title == other.title;
+  return title == other.title;
 }
 
 bool Movie::operator<(const Movie &other) const
 {
-    return title < other.title;
+  return title < other.title;
 }
 
 std::ostream &operator<<(std::ostream &os, const Movie &movie)
 {
-    os << "[ID: " << movie.id << "] "
-       << movie.title
-       << " (" << movie.releaseYear << ")"
-       << " | 장르: " << movie.genre;
-    return os;
+  os << "[ID: " << movie.id << "] "
+     << movie.title
+     << " (" << movie.releaseYear << ")"
+     << " | 장르: " << movie.genre;
+  return os;
 }

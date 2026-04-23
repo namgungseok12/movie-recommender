@@ -22,5 +22,8 @@ public:
 
   static bool isValidEmail(const std::string &targetEmail);
 
+  bool operator==(const User &other) const;
+  bool operator!=(const User &other) const;
+
   friend std::ostream &operator<<(std::ostream &os, const User &user);
 };

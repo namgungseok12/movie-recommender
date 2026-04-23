@@ -13,27 +13,27 @@ Rating::Rating(int uId, int mId, double s)
 
 int Rating::getUserId() const
 {
-    return userId;
+  return userId;
 }
 
 int Rating::getMovieId() const
 {
-    return movieId;
+  return movieId;
 }
 
 double Rating::getScore() const
 {
-    return score;
+  return score;
 }
 
 bool Rating::isValidScore(double score)
 {
-    return score >= 0.0 && score <= 5.0;
+  return score >= 0.0 && score <= 5.0;
 }
 
 ostream &operator<<(ostream &os, const Rating &rating)
 {
-    os << "[Rating] User ID: " << rating.userId
-       << " | Score: " << rating.score;
-    return os;
+  os << "[Rating] User ID: " << rating.userId
+     << " | Score: " << rating.score;
+  return os;
 }

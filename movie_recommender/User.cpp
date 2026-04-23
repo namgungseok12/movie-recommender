@@ -47,6 +47,16 @@ bool User::isValidEmail(const string &targetEmail)
   return targetEmail.find('@') != string::npos;
 }
 
+bool User::operator==(const User &other) const
+{
+  return name == other.name;
+}
+
+bool User::operator!=(const User &other) const
+{
+  return !(*this == other);
+}
+
 ostream &operator<<(ostream &os, const User &user)
 {
   os << "[User " << user.id << "] Name: " << user.name

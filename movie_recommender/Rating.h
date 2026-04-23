@@ -4,19 +4,19 @@
 class Rating
 {
 private:
-    int userId;
-    int movieId;
-    double score;
+  int userId;
+  int movieId;
+  double score;
 
 public:
-    Rating();
-    Rating(int uId, int mId, double s);
+  Rating();
+  Rating(int uId, int mId, double s);
 
-    int getUserId() const;
-    int getMovieId() const;
-    double getScore() const;
+  int getUserId() const;
+  int getMovieId() const;
+  double getScore() const;
 
-    static bool isValidScore(double score);
+  static bool isValidScore(double score);
 
-    friend std::ostream &operator<<(std::ostream &os, const Rating &rating);
+  friend std::ostream &operator<<(std::ostream &os, const Rating &rating);
 };

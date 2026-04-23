@@ -8,6 +8,92 @@
 
 using namespace std;
 
+string readLine(const string &prompt)
+{
+  string input;
+  cout << prompt;
+  getline(cin, input);
+  return input;
+}
+
+int readValidMenuChoice()
+{
+  int choice;
+  cin >> choice;
+
+  if (cin.fail())
+  {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    return -1;
+  }
+
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  return choice;
+}
+
+bool readValidYear(int &year)
+{
+  cout << "개봉 연도 입력: ";
+  cin >> year;
+
+  if (cin.fail())
+  {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "개봉 연도는 숫자로 입력하세요." << endl;
+    return false;
+  }
+
+  if (cin.peek() != '\n')
+  {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "유효하지 않은 연도입니다. 영화가 추가되지 않았습니다." << endl;
+    return false;
+  }
+
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+  if (year < 1888 || year > 2100)
+  {
+    cout << "유효하지 않은 연도입니다. 영화가 추가되지 않았습니다." << endl;
+    return false;
+  }
+
+  return true;
+}
+
+bool readValidScore(double &score, const string &invalidMessage)
+{
+  cout << "평점 입력 (0.0 ~ 5.0): ";
+  cin >> score;
+
+  if (cin.fail())
+  {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "평점은 숫자로 입력하세요." << endl;
+    return false;
+  }
+
+  if (cin.peek() != '\n')
+  {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "평점 형식이 올바르지 않습니다." << endl;
+    return false;
+  }
+
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+  if (score < 0.0 || score > 5.0)
+  {
+    cout << invalidMessage << endl;
+    return false;
+  }
+
+  return true;
+}
+
 int main()
 {
   MovieManager movieManager;
@@ -36,17 +122,16 @@ int main()
          << "[ 평점 ]" << endl;
     cout << "7. 평점 입력" << endl;
     cout << "8. 영화별 평점 보기" << endl;
-    cout << "0. 종료" << endl;
+
+    cout << endl
+         << "0. 종료" << endl;
 
     cout << endl
          << "선택 > ";
-    cin >> choice;
+    choice = readValidMenuChoice();
 
-    if (cin.fail())
+    if (choice == -1)
     {
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      choice = -1;
       cout << "올바른 번호를 입력하세요." << endl;
       continue;
     }
@@ -55,17 +140,7 @@ int main()
     {
     case 1:
     {
-      string userName;
-      string title;
-      string genre;
-      int year;
-      double initialScore;
-
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-      cout << "영화를 등록할 사용자 이름 입력: ";
-      getline(cin, userName);
-
+      string userName = readLine("영화를 등록할 사용자 이름 입력: ");
       User *foundUser = userManager.findByName(userName);
       if (foundUser == nullptr)
       {
@@ -73,38 +148,18 @@ int main()
         break;
       }
 
-      cout << "영화 제목 입력: ";
-      getline(cin, title);
+      string title = readLine("영화 제목 입력: ");
+      string genre = readLine("장르 입력: ");
 
-      cout << "장르 입력: ";
-      getline(cin, genre);
-
-      cout << "개봉 연도 입력: ";
-      cin >> year;
-
-      if (cin.fail())
+      int year;
+      if (!readValidYear(year))
       {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "개봉 연도는 숫자로 입력하세요." << endl;
         break;
       }
 
-      cout << "평점 입력 (0.0 ~ 5.0): ";
-      cin >> initialScore;
-
-      if (cin.fail())
+      double initialScore;
+      if (!readValidScore(initialScore, "유효하지 않은 평점입니다. 영화가 추가되지 않았습니다."))
       {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "평점은 숫자로 입력하세요." << endl;
-        break;
-      }
-
-      if (initialScore < 0.0 || initialScore > 5.0)
-      {
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "유효하지 않은 평점입니다. 영화가 추가되지 않았습니다." << endl;
         break;
       }
 
@@ -123,13 +178,9 @@ int main()
 
     case 2:
     {
-      string title;
-
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      cout << "검색할 영화 제목 입력: ";
-      getline(cin, title);
-
+      string title = readLine("검색할 영화 제목 입력: ");
       Movie *foundMovie = movieManager.findByTitle(title);
+
       if (foundMovie != nullptr)
       {
         cout << "\n--- [검색 결과] ---" << endl;
@@ -145,29 +196,21 @@ int main()
     case 3:
     {
       cout << "\n--- [전체 영화 목록] ---" << endl;
-      movieManager.printAll();
+      movieManager.printAllSortedByTitle();
       break;
     }
 
     case 4:
     {
       cout << "\n--- [평점순 정렬 영화 목록] ---" << endl;
-      movieManager.printSortedByRating();
+      movieManager.printAllSortedByRating();
       break;
     }
 
     case 5:
     {
-      string name;
-      string email;
-
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-      cout << "사용자 이름 입력: ";
-      getline(cin, name);
-
-      cout << "이메일 입력: ";
-      getline(cin, email);
+      string name = readLine("사용자 이름 입력: ");
+      string email = readLine("이메일 입력: ");
 
       if (!User::isValidEmail(email))
       {
@@ -189,15 +232,7 @@ int main()
 
     case 7:
     {
-      string userName;
-      string movieTitle;
-      double score;
-
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-      cout << "평점을 입력할 사용자 이름 입력: ";
-      getline(cin, userName);
-
+      string userName = readLine("평점을 입력할 사용자 이름 입력: ");
       User *foundUser = userManager.findByName(userName);
       if (foundUser == nullptr)
       {
@@ -205,9 +240,7 @@ int main()
         break;
       }
 
-      cout << "평점을 남길 영화 제목 입력: ";
-      getline(cin, movieTitle);
-
+      string movieTitle = readLine("평점을 남길 영화 제목 입력: ");
       Movie *foundMovie = movieManager.findByTitle(movieTitle);
       if (foundMovie == nullptr)
       {
@@ -221,21 +254,9 @@ int main()
         break;
       }
 
-      cout << "평점 입력 (0.0 ~ 5.0): ";
-      cin >> score;
-
-      if (cin.fail())
+      double score;
+      if (!readValidScore(score, "유효하지 않은 평점입니다. 평점이 입력되지 않았습니다."))
       {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "평점은 숫자로 입력하세요." << endl;
-        break;
-      }
-
-      if (score < 0.0 || score > 5.0)
-      {
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "유효하지 않은 평점입니다. 평점이 입력되지 않았습니다." << endl;
         break;
       }
 
@@ -249,14 +270,9 @@ int main()
 
     case 8:
     {
-      string movieTitle;
-
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-      cout << "평점을 조회할 영화 제목 입력: ";
-      getline(cin, movieTitle);
-
+      string movieTitle = readLine("평점을 조회할 영화 제목 입력: ");
       Movie *foundMovie = movieManager.findByTitle(movieTitle);
+
       if (foundMovie == nullptr)
       {
         cout << "해당 제목의 영화를 찾을 수 없습니다." << endl;
@@ -265,7 +281,6 @@ int main()
 
       cout << "\n--- [" << movieTitle << " 평점 목록] ---" << endl;
       ratingManager.printRatingsByMovieId(foundMovie->getId());
-
       cout << "평균 평점: "
            << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
       break;

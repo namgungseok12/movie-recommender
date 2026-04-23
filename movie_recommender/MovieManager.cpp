@@ -42,26 +42,7 @@ Movie *MovieManager::findByTitle(const string &title)
     return nullptr;
 }
 
-void MovieManager::sortByRating()
-{
-    sort(movies.begin(), movies.end());
-}
-
-void MovieManager::printAll() const
-{
-    if (movies.empty())
-    {
-        cout << "등록된 영화가 없습니다." << endl;
-        return;
-    }
-
-    for (const Movie &movie : movies)
-    {
-        cout << movie << endl;
-    }
-}
-
-void MovieManager::printSortedByRating() const
+void MovieManager::printAllSortedByTitle() const
 {
     if (movies.empty())
     {
@@ -70,7 +51,23 @@ void MovieManager::printSortedByRating() const
     }
 
     vector<Movie> sortedMovies = movies;
+    sort(sortedMovies.begin(), sortedMovies.end());
 
+    for (const Movie &movie : sortedMovies)
+    {
+        cout << movie << endl;
+    }
+}
+
+void MovieManager::printAllSortedByRating() const
+{
+    if (movies.empty())
+    {
+        cout << "등록된 영화가 없습니다." << endl;
+        return;
+    }
+
+    vector<Movie> sortedMovies = movies;
     sort(sortedMovies.begin(), sortedMovies.end(),
          [](const Movie &a, const Movie &b)
          {

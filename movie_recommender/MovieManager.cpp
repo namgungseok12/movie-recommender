@@ -5,15 +5,14 @@
 
 using namespace std;
 
-namespace
-{
+
   void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
   {
     cout << movie
          << " | 평균 평점: " << ratingManager.getAverageRatingByMovieId(movie.getId())
          << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
   }
-}
+
 
 MovieManager::MovieManager() : nextMovieId(1)
 {

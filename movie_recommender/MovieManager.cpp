@@ -1,14 +1,25 @@
 #include "MovieManager.h"
+#include "RatingManager.h"
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
 
+namespace
+{
+    void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
+    {
+        cout << movie
+             << " | 평균 평점: " << ratingManager.getAverageRatingByMovieId(movie.getId())
+             << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
+    }
+}
+
 MovieManager::MovieManager() : nextMovieId(1)
 {
 }
 
-int MovieManager::addMovie(const std::string &title, const std::string &genre, int year, double initialScore)
+int MovieManager::addMovie(const std::string &title, const std::string &genre, int year)
 {
     Movie newMovie(nextMovieId, title, genre, year);
 
@@ -21,7 +32,6 @@ int MovieManager::addMovie(const std::string &title, const std::string &genre, i
         }
     }
 
-    newMovie.addRating(initialScore);
     movies.push_back(newMovie);
 
     int createdId = nextMovieId;
@@ -31,9 +41,11 @@ int MovieManager::addMovie(const std::string &title, const std::string &genre, i
 
 Movie *MovieManager::findByTitle(const string &title)
 {
+    Movie target(0, title, "", 0);
+
     for (Movie &movie : movies)
     {
-        if (movie.getTitle() == title)
+        if (movie == target)
         {
             return &movie;
         }
@@ -42,7 +54,7 @@ Movie *MovieManager::findByTitle(const string &title)
     return nullptr;
 }
 
-void MovieManager::printAllSortedByTitle() const
+void MovieManager::printAllSortedByTitle(const RatingManager &ratingManager) const
 {
     if (movies.empty())
     {
@@ -55,11 +67,12 @@ void MovieManager::printAllSortedByTitle() const
 
     for (const Movie &movie : sortedMovies)
     {
-        cout << movie << endl;
+        printMovieWithRating(movie, ratingManager);
+        cout << endl;
     }
 }
 
-void MovieManager::printAllSortedByRating() const
+void MovieManager::printAllSortedByRating(const RatingManager &ratingManager) const
 {
     if (movies.empty())
     {
@@ -69,17 +82,21 @@ void MovieManager::printAllSortedByRating() const
 
     vector<Movie> sortedMovies = movies;
     sort(sortedMovies.begin(), sortedMovies.end(),
-         [](const Movie &a, const Movie &b)
+         [&ratingManager](const Movie &a, const Movie &b)
          {
-             if (a.getAverageRating() != b.getAverageRating())
+             const double avgA = ratingManager.getAverageRatingByMovieId(a.getId());
+             const double avgB = ratingManager.getAverageRatingByMovieId(b.getId());
+
+             if (avgA != avgB)
              {
-                 return a.getAverageRating() > b.getAverageRating();
+                 return avgA > avgB;
              }
              return a.getTitle() < b.getTitle();
          });
 
     for (const Movie &movie : sortedMovies)
     {
-        cout << movie << endl;
+        printMovieWithRating(movie, ratingManager);
+        cout << endl;
     }
 }

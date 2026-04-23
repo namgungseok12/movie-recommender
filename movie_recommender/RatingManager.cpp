@@ -63,6 +63,21 @@ double RatingManager::getAverageRatingByMovieId(int movieId) const
     return total / count;
 }
 
+int RatingManager::getRatingCountByMovieId(int movieId) const
+{
+    int count = 0;
+
+    for (const Rating &rating : ratings)
+    {
+        if (rating.getMovieId() == movieId)
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 bool RatingManager::hasRating(int userId, int movieId) const
 {
     for (const Rating &rating : ratings)

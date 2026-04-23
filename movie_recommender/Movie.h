@@ -9,8 +9,6 @@ private:
     std::string title;
     std::string genre;
     int releaseYear;
-    double totalRating;
-    int ratingCount;
 
 public:
     Movie();
@@ -20,10 +18,8 @@ public:
     std::string getTitle() const;
     std::string getGenre() const;
     int getReleaseYear() const;
-    double getAverageRating() const;
-    int getRatingCount() const;
 
-    void addRating(double r);
+    static bool isValidYear(int year);
 
     bool operator==(const Movie &other) const;
     bool operator<(const Movie &other) const;

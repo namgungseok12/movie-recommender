@@ -4,6 +4,8 @@
 #include <string>
 #include "Movie.h"
 
+class RatingManager;
+
 class MovieManager
 {
 private:
@@ -13,9 +15,9 @@ private:
 public:
     MovieManager();
 
-    int addMovie(const std::string &title, const std::string &genre, int year, double initialScore);
+    int addMovie(const std::string &title, const std::string &genre, int year);
     Movie *findByTitle(const std::string &title);
 
-    void printAllSortedByTitle() const;
-    void printAllSortedByRating() const;
+    void printAllSortedByTitle(const RatingManager &ratingManager) const;
+    void printAllSortedByRating(const RatingManager &ratingManager) const;
 };

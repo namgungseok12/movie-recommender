@@ -1,75 +1,55 @@
 #include "Movie.h"
 
 Movie::Movie()
-    : id(0), title(""), genre(""), releaseYear(0), totalRating(0.0), ratingCount(0)
+    : id(0), title(""), genre(""), releaseYear(0)
 {
 }
 
 Movie::Movie(int id, const std::string &title, const std::string &genre, int year)
-    : id(id), title(title), genre(genre), releaseYear(year), totalRating(0.0), ratingCount(0)
+    : id(id), title(title), genre(genre), releaseYear(year)
 {
 }
 
 int Movie::getId() const
 {
-  return id;
+    return id;
 }
 
 std::string Movie::getTitle() const
 {
-  return title;
+    return title;
 }
 
 std::string Movie::getGenre() const
 {
-  return genre;
+    return genre;
 }
 
 int Movie::getReleaseYear() const
 {
-  return releaseYear;
+    return releaseYear;
 }
 
-double Movie::getAverageRating() const
+bool Movie::isValidYear(int year)
 {
-  if (ratingCount == 0)
-  {
-    return 0.0;
-  }
-  return totalRating / ratingCount;
-}
-
-int Movie::getRatingCount() const
-{
-  return ratingCount;
-}
-
-void Movie::addRating(double r)
-{
-  if (r < 0.0 || r > 5.0)
-  {
-    return;
-  }
-
-  totalRating += r;
-  ratingCount++;
+    return year >= 1888 && year <= 2100;
 }
 
 bool Movie::operator==(const Movie &other) const
 {
-  return title == other.title;
+    return title == other.title;
 }
 
 bool Movie::operator<(const Movie &other) const
 {
-  return title < other.title;
+    return title < other.title;
 }
 
 std::ostream &operator<<(std::ostream &os, const Movie &movie)
 {
-  os << movie.title
-     << " (" << movie.releaseYear << ")"
-     << "  평점: " << movie.getAverageRating()
-     << " (" << movie.ratingCount << "건)";
-  return os;
+    os << "[ID: " << movie.id << "] "
+       << movie.title
+       << " (" << movie.releaseYear << ")"
+       << " | 장르: " << movie.genre;
+    return os;
 }

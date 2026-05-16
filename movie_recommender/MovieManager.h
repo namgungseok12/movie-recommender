@@ -16,7 +16,7 @@ public:
   MovieManager();
 
   int addMovie(const std::string &title, const std::string &genre, int year);
-  Movie *findByTitle(const std::string &title);
+  const Movie *findByTitle(const std::string &title) const;
 
   void printAllSortedByTitle(const RatingManager &ratingManager) const;
   void printAllSortedByRating(const RatingManager &ratingManager) const;

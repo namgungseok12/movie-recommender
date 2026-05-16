@@ -23,18 +23,18 @@ int UserManager::addUser(const std::string &name, const std::string &email)
   return createdId;
 }
 
-User *UserManager::findByName(const std::string &name)
+const User *UserManager::findByName(const std::string &name) const
 {
   User target(0, name, "");
 
-  for (User &user : users)
+  // 내부에서 읽기만 하므로 const User &로 순회
+  for (const User &user : users)
   {
     if (user == target)
     {
       return &user;
     }
   }
-
   return nullptr;
 }
 

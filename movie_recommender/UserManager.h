@@ -13,6 +13,6 @@ public:
   UserManager();
 
   int addUser(const std::string &name, const std::string &email);
-  User *findByName(const std::string &name);
+  const User *findByName(const std::string &name) const;
   void printAll() const;
 };

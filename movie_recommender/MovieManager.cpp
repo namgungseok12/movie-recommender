@@ -5,14 +5,12 @@
 
 using namespace std;
 
-
-  void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
-  {
-    cout << movie
-         << " | 평균 평점: " << ratingManager.getAverageRatingByMovieId(movie.getId())
-         << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
-  }
-
+void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
+{
+  cout << movie
+       << " | 평점: " << ratingManager.getAverageRatingByMovieId(movie.getId())
+       << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
+}
 
 MovieManager::MovieManager() : nextMovieId(1)
 {
@@ -38,18 +36,17 @@ int MovieManager::addMovie(const std::string &title, const std::string &genre, i
   return createdId;
 }
 
-Movie *MovieManager::findByTitle(const string &title)
+const Movie *MovieManager::findByTitle(const string &title) const
 {
   Movie target(0, title, "", 0);
 
-  for (Movie &movie : movies)
+  for (const Movie &movie : movies)
   {
     if (movie == target)
     {
       return &movie;
     }
   }
-
   return nullptr;
 }
 

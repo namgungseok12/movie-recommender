@@ -165,7 +165,7 @@ int main()
     case 2:
     {
       string title = readLine("검색할 영화 제목 입력: ");
-      Movie *foundMovie = movieManager.findByTitle(title);
+      const Movie *foundMovie = movieManager.findByTitle(title);
 
       if (foundMovie != nullptr)
       {
@@ -226,7 +226,7 @@ int main()
     case 7:
     {
       string userName = readLine("평점을 입력할 사용자 이름 입력: ");
-      User *foundUser = userManager.findByName(userName);
+      const User *foundUser = userManager.findByName(userName);
       if (foundUser == nullptr)
       {
         cout << "등록된 사용자만 평점을 입력할 수 있습니다." << endl;
@@ -234,7 +234,7 @@ int main()
       }
 
       string movieTitle = readLine("평점을 남길 영화 제목 입력: ");
-      Movie *foundMovie = movieManager.findByTitle(movieTitle);
+      const Movie *foundMovie = movieManager.findByTitle(movieTitle);
       if (foundMovie == nullptr)
       {
         cout << "해당 제목의 영화를 찾을 수 없습니다." << endl;
@@ -263,7 +263,7 @@ int main()
     case 8:
     {
       string movieTitle = readLine("평점을 조회할 영화 제목 입력: ");
-      Movie *foundMovie = movieManager.findByTitle(movieTitle);
+      const Movie *foundMovie = movieManager.findByTitle(movieTitle);
 
       if (foundMovie == nullptr)
       {
@@ -274,7 +274,7 @@ int main()
       cout << "\n--- [" << movieTitle << " 평점 목록] ---" << endl;
       ratingManager.printRatingsByMovieId(foundMovie->getId());
       cout << "평균 평점: "
-           << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
+          << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
       break;
     }
 

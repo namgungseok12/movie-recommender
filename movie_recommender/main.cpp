@@ -142,14 +142,7 @@ int main()
     {
     case 1:
     {
-      string userName = readLine("영화를 등록할 사용자 이름 입력: ");
-      User *foundUser = userManager.findByName(userName);
-      if (foundUser == nullptr)
-      {
-        cout << "등록된 사용자만 영화를 추가할 수 있습니다." << endl;
-        break;
-      }
-
+      // [수정] 평가 안내서 요구사항에 맞게 사용자 인증 및 초기 평점 로직 제거
       string title = readLine("영화 제목 입력: ");
       string genre = readLine("장르 입력: ");
 
@@ -159,20 +152,11 @@ int main()
         break;
       }
 
-      double initialScore;
-      if (!readValidScore(initialScore, "유효하지 않은 평점입니다. 영화가 추가되지 않았습니다."))
-      {
-        break;
-      }
-
       int movieId = movieManager.addMovie(title, genre, year);
       if (movieId == -1)
       {
         break;
       }
-
-      Rating rating(foundUser->getId(), movieId, initialScore);
-      ratingManager.addRating(rating);
 
       cout << "영화가 추가되었습니다. [ID: " << movieId << "]" << endl;
       break;
@@ -304,6 +288,5 @@ int main()
     }
 
   } while (choice != 0);
-
   return 0;
 }

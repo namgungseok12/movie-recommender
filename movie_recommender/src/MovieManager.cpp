@@ -77,18 +77,17 @@ void MovieManager::printAllSortedByRating(const RatingManager &ratingManager) co
   }
 
   vector<Movie> sortedMovies = movies;
-  sort(sortedMovies.begin(), sortedMovies.end(),
-       [&ratingManager](const Movie &a, const Movie &b)
-       {
-         const double avgA = ratingManager.getAverageRatingByMovieId(a.getId());
-         const double avgB = ratingManager.getAverageRatingByMovieId(b.getId());
+  sort(sortedMovies.begin(), sortedMovies.end(), [&ratingManager] (const Movie &a, const Movie &b)
+      {
+        const double avgA = ratingManager.getAverageRatingByMovieId(a.getId());
+        const double avgB = ratingManager.getAverageRatingByMovieId(b.getId());
 
-         if (avgA != avgB)
-         {
-           return avgA > avgB;
-         }
-         return a.getTitle() < b.getTitle();
-       });
+        if (avgA != avgB)
+        {
+          return avgA > avgB;
+        }
+        return a.getTitle() < b.getTitle();
+      });
 
   for (const Movie &movie : sortedMovies)
   {

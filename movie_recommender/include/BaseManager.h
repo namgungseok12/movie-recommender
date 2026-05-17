@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-// M3 필수 요구사항: 모든 매니저 클래스의 공통 규격을 강제하는 추상 클래스
 class BaseManager
 {
 public:

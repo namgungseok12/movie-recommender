@@ -5,7 +5,7 @@ TARGET = movie_recommender
 SRCDIR = src
 OBJDIR = obj
 
-OBJS = $(addprefix $(OBJDIR)/, main.o Movie.o User.o Rating.o BaseManager.o MovieManager.o UserManager.o RatingManager.o)
+OBJS = $(addprefix $(OBJDIR)/, main.o Movie.o User.o Rating.o BaseManager.o MovieManager.o UserManager.o RatingManager.o SimilarityCalculator.o)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)

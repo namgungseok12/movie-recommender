@@ -3,7 +3,10 @@
 
 using namespace std;
 
-User::User() : id(0), name(""), email("") {}
+User::User()
+    : id(0), name(""), email("")
+{
+}
 
 User::User(int uId, const string &uName, const string &uEmail)
     : id(uId), name(uName), email(uEmail)

@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
-#include <string>
 #include "BaseManager.h"
 #include "Movie.h"
+#include <vector>
+#include <string>
 
 class RatingManager;
 
@@ -17,13 +17,17 @@ public:
 
   int addMovie(const std::string &title, const std::string &genre, int year);
   const Movie *findByTitle(const std::string &title) const;
-  const Movie *findById(int id) const; 
+  const Movie *findById(int id) const;
 
   void printAllSortedByTitle(const RatingManager &ratingManager) const;
   void printAllSortedByRating(const RatingManager &ratingManager) const;
 
-  // BaseManager 인터페이스 구현
-  void loadFromFile(const std::string &filename) override;
-  void saveToFile(const std::string &filename) const override;
   int size() const override;
+
+protected:
+  void clear() override;
+  void parseLine(const std::string &line) override;
+  void onPostLoad() override;
+  std::string getHeader() const override;
+  std::string formatLine(int index) const override;
 };

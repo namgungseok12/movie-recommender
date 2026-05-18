@@ -1,5 +1,6 @@
 #include "UserManager.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -7,7 +8,7 @@ UserManager::UserManager() : nextUserId(1)
 {
 }
 
-int UserManager::addUser(const std::string &name, const std::string &email)
+int UserManager::addUser(const string &name, const string &email)
 {
   if (findByName(name) != nullptr)
   {
@@ -23,14 +24,25 @@ int UserManager::addUser(const std::string &name, const std::string &email)
   return createdId;
 }
 
-const User *UserManager::findByName(const std::string &name) const
+const User *UserManager::findByName(const string &name) const
 {
   User target(0, name, "");
 
-  // 내부에서 읽기만 하므로 const User &로 순회
   for (const User &user : users)
   {
     if (user == target)
+    {
+      return &user;
+    }
+  }
+  return nullptr;
+}
+
+const User *UserManager::findById(int id) const
+{
+  for (const auto &user : users)
+  {
+    if (user.getId() == id)
     {
       return &user;
     }
@@ -50,4 +62,53 @@ void UserManager::printAll() const
   {
     cout << user << endl;
   }
+}
+
+int UserManager::size() const
+{
+  return static_cast<int>(users.size());
+}
+
+void UserManager::clear()
+{
+  users.clear();
+}
+
+void UserManager::parseLine(const string &line)
+{
+  stringstream ss(line);
+  string token;
+
+  getline(ss, token, ',');
+  int id = stoi(token);
+  getline(ss, token, ',');
+  string name = token;
+  getline(ss, token, ',');
+  string email = token;
+
+  users.push_back(User(id, name, email));
+}
+
+void UserManager::onPostLoad()
+{
+  int maxId = 0;
+  for (const auto &user : users)
+  {
+    if (user.getId() > maxId)
+    {
+      maxId = user.getId();
+    }
+  }
+  nextUserId = maxId + 1;
+}
+
+string UserManager::getHeader() const
+{
+  return "id,name,email";
+}
+
+string UserManager::formatLine(int index) const
+{
+  const auto &u = users[index];
+  return to_string(u.getId()) + "," + u.getName() + "," + u.getEmail();
 }

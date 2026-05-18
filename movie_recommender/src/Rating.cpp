@@ -2,7 +2,8 @@
 
 using namespace std;
 
-Rating::Rating() : userId(0), movieId(0), score(0.0)
+Rating::Rating()
+    : userId(0), movieId(0), score(0.0)
 {
 }
 

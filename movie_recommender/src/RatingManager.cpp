@@ -1,7 +1,13 @@
 #include "RatingManager.h"
 #include <iostream>
+#include <sstream>
+#include <set>
 
 using namespace std;
+
+RatingManager::RatingManager()
+{
+}
 
 void RatingManager::addRating(const Rating &rating)
 {
@@ -89,4 +95,64 @@ bool RatingManager::hasRating(int userId, int movieId) const
   }
 
   return false;
+}
+
+vector<Rating> RatingManager::findByUser(int userId) const
+{
+  vector<Rating> userRatings;
+  for (const auto &rating : ratings)
+  {
+    if (rating.getUserId() == userId)
+    {
+      userRatings.push_back(rating);
+    }
+  }
+  return userRatings;
+}
+
+vector<int> RatingManager::getAllUserIds() const
+{
+  set<int> uniqueIds;
+  for (const auto &rating : ratings)
+  {
+    uniqueIds.insert(rating.getUserId());
+  }
+  return vector<int>(uniqueIds.begin(), uniqueIds.end());
+}
+
+int RatingManager::size() const
+{
+  return static_cast<int>(ratings.size());
+}
+
+void RatingManager::clear()
+{
+  ratings.clear();
+}
+
+void RatingManager::parseLine(const string &line)
+{
+  stringstream ss(line);
+  string token;
+
+  getline(ss, token, ',');
+  int userId = stoi(token);
+  getline(ss, token, ',');
+  int movieId = stoi(token);
+  getline(ss, token, ',');
+  double score = stod(token);
+
+  ratings.push_back(Rating(userId, movieId, score));
+}
+
+string RatingManager::getHeader() const
+{
+  return "userId,movieId,score";
+}
+
+string RatingManager::formatLine(int index) const
+{
+  stringstream ss;
+  ss << ratings[index].getUserId() << "," << ratings[index].getMovieId() << "," << ratings[index].getScore();
+  return ss.str();
 }

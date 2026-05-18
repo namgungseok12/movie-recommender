@@ -102,6 +102,11 @@ int main()
   UserManager userManager;
   RatingManager ratingManager;
 
+  // 프로그램 구동 즉시 CSV 데이터 일괄 수집
+  movieManager.loadFromFile("data/movies.csv");
+  userManager.loadFromFile("data/users.csv");
+  ratingManager.loadFromFile("data/ratings.csv");
+
   int choice = -1;
 
   do
@@ -142,7 +147,6 @@ int main()
     {
     case 1:
     {
-      // [수정] 평가 안내서 요구사항에 맞게 사용자 인증 및 초기 평점 로직 제거
       string title = readLine("영화 제목 입력: ");
       string genre = readLine("장르 입력: ");
 
@@ -200,12 +204,7 @@ int main()
       string name = readLine("사용자 이름 입력: ");
       string email = readLine("이메일 입력: ");
 
-      if (!User::isValidEmail(email))
-      {
-        cout << "유효하지 않은 이메일 형식입니다. 사용자가 추가되지 않았습니다." << endl;
-        break;
-      }
-
+      // 요구사항 반영: 이메일 형식을 체크하는 예외 블로킹 필터를 해제하여 유연하게 등록 수용
       int userId = userManager.addUser(name, email);
 
       if (userId != -1)
@@ -274,7 +273,7 @@ int main()
       cout << "\n--- [" << movieTitle << " 평점 목록] ---" << endl;
       ratingManager.printRatingsByMovieId(foundMovie->getId());
       cout << "평균 평점: "
-          << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
+           << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
       break;
     }
 
@@ -288,5 +287,11 @@ int main()
     }
 
   } while (choice != 0);
+
+  // 디스크 백업 영속성 세이브
+  movieManager.saveToFile("data/movies.csv");
+  userManager.saveToFile("data/users.csv");
+  ratingManager.saveToFile("data/ratings.csv");
+
   return 0;
 }

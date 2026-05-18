@@ -4,6 +4,7 @@
 #include "MovieManager.h"
 #include "UserManager.h"
 #include "RatingManager.h"
+#include "Recommender.h"
 #include "User.h"
 #include "Movie.h"
 #include "Rating.h"
@@ -102,7 +103,9 @@ int main()
   UserManager userManager;
   RatingManager ratingManager;
 
-  // 프로그램 구동 즉시 CSV 데이터 일괄 수집
+  // 의존성 주입 패턴에 따라 Recommender에 매니저 참조 연동
+  Recommender recommender(movieManager, userManager, ratingManager);
+
   movieManager.loadFromFile("data/movies.csv");
   userManager.loadFromFile("data/users.csv");
   ratingManager.loadFromFile("data/ratings.csv");
@@ -129,6 +132,10 @@ int main()
          << "[ 평점 ]" << endl;
     cout << "7. 평점 입력" << endl;
     cout << "8. 영화별 평점 보기" << endl;
+
+    cout << endl
+         << "[ 추천 시스템 ]" << endl;
+    cout << "9. 추천 영화 보기" << endl;
 
     cout << endl
          << "0. 종료" << endl;
@@ -204,14 +211,11 @@ int main()
       string name = readLine("사용자 이름 입력: ");
       string email = readLine("이메일 입력: ");
 
-      // 요구사항 반영: 이메일 형식을 체크하는 예외 블로킹 필터를 해제하여 유연하게 등록 수용
       int userId = userManager.addUser(name, email);
-
       if (userId != -1)
       {
         cout << "사용자가 추가되었습니다. [ID: " << userId << "]" << endl;
       }
-
       break;
     }
 
@@ -277,6 +281,13 @@ int main()
       break;
     }
 
+    case 9:
+    {
+      string userName = readLine("추천을 진행할 사용자 이름 입력: ");
+      recommender.printRecommendations(userName);
+      break;
+    }
+
     case 0:
       cout << "프로그램을 종료합니다." << endl;
       break;
@@ -288,7 +299,6 @@ int main()
 
   } while (choice != 0);
 
-  // 디스크 백업 영속성 세이브
   movieManager.saveToFile("data/movies.csv");
   userManager.saveToFile("data/users.csv");
   ratingManager.saveToFile("data/ratings.csv");

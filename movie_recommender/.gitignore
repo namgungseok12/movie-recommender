@@ -4,4 +4,6 @@
 *.dylib
 *.exe
 *.out
+*.sh
+obj/
 movie_recommender

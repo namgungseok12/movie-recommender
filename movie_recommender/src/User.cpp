@@ -3,11 +3,12 @@
 
 using namespace std;
 
-User::User()
-    : id(0), name(""), email("")
+// 기본 생성자
+User::User() : id(0), name(""), email("")
 {
 }
 
+// 매개변수 생성자
 User::User(int uId, const string &uName, const string &uEmail)
     : id(uId), name(uName), email(uEmail)
 {
@@ -35,24 +36,12 @@ void User::setName(const string &uName)
 
 void User::setEmail(const string &uEmail)
 {
-  if (isValidEmail(uEmail))
-  {
-    email = uEmail;
-  }
-  else
-  {
-    cout << "❌ 오류: 잘못된 이메일 형식으로 변경할 수 없습니다." << endl;
-  }
-}
-
-bool User::isValidEmail(const string &targetEmail)
-{
-  return targetEmail.find('@') != string::npos;
+  email = uEmail;
 }
 
 bool User::operator==(const User &other) const
 {
-  return name == other.name;
+  return this->id == other.id;
 }
 
 bool User::operator!=(const User &other) const
@@ -62,7 +51,6 @@ bool User::operator!=(const User &other) const
 
 ostream &operator<<(ostream &os, const User &user)
 {
-  os << "[User " << user.id << "] Name: " << user.name
-     << ", Email: " << user.email;
+  os << "사용자 ID: " << user.id << " | 이름: " << user.name << " | 이메일: " << user.email;
   return os;
 }

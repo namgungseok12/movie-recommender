@@ -4,26 +4,24 @@
 #include "Movie.h"
 #include "Rating.h"
 
-// 전방 선언을 통해 헤더 파일이 서로 엉키는 문제를 차단합니다.
 class MovieManager;
 class UserManager;
 class RatingManager;
 
+// 이웃 기반 협업 필터링(Collaborative Filtering) 알고리즘을 수행
 class Recommender
 {
 private:
-  // 원본 데이터를 안전하게 참조하기 위한 const 참조자 멤버 변수 (슬라이드 7 요구사항) [cite: 271, 272, 273]
-  const MovieManager &movieManager;
-  const UserManager &userManager;
-  const RatingManager &ratingManager;
+    const MovieManager &movieManager;
+    const UserManager &userManager;
+    const RatingManager &ratingManager;
 
 public:
-  // 생성자 초기화 리스트를 필수 사용하도록 설계 (슬라이드 7 요구사항) [cite: 274, 275, 276]
-  Recommender(const MovieManager &movieMgr, const UserManager &userMgr, const RatingManager &ratingMgr);
+    Recommender(const MovieManager &movieMgr, const UserManager &userMgr, const RatingManager &ratingMgr);
 
-  // [교수님 필수 요구사항 ①] Similaritycalculate - 대소문자 시그니처 일치 (슬라이드 4, 18 요구사항) [cite: 237, 488]
-  static int Similaritycalculate(const std::vector<Rating> &ratingsA, const std::vector<Rating> &ratingsB);
+    // 두 사용자의 평점 벡터를 비교하여 유사도 점수를 정수로 계산
+    static int Similaritycalculate(const std::vector<Rating> &ratingsA, const std::vector<Rating> &ratingsB);
 
-  // [교수님 필수 요구사항 ②] recommend - 5단계 흐름 및 엣지 케이스 처리 (슬라이드 8, 18 요구사항) [cite: 283, 489]
-  std::vector<Movie> recommend(const std::string &userName, int k, int n) const;
+    // 타겟 사용자의 이름을 받아 최종 N개의 맞춤형 추천 영화 객체 배열을 반환(K=이웃 수, N=추천 영화 수)
+    std::vector<Movie> recommend(const std::string &userName, int k, int n) const;
 };

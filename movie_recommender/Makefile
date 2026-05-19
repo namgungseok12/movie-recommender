@@ -5,8 +5,7 @@ TARGET = movie_recommender
 SRCDIR = src
 OBJDIR = obj
 
-# Recommender.o까지 포함하여 컴파일 타겟 라인 완성
-OBJS = $(addprefix $(OBJDIR)/, main.o Movie.o User.o Rating.o BaseManager.o MovieManager.o UserManager.o RatingManager.o SimilarityCalculator.o Recommender.o)
+OBJS = $(addprefix $(OBJDIR)/, main.o Movie.o User.o Rating.o BaseManager.o MovieManager.o UserManager.o RatingManager.o Recommender.o Menu.o)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)

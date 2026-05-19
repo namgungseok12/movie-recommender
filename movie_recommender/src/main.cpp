@@ -284,7 +284,23 @@ int main()
     case 9:
     {
       string userName = readLine("추천을 진행할 사용자 이름 입력: ");
-      recommender.printRecommendations(userName);
+
+      // 💡 예전 printRecommendations 대신, 상위 N개 결과를 받아와서 출력하는 구조로 변경!
+      // K(이웃 수)=3, N(추천 영화 수)=3으로 설정
+      vector<Movie> recommendations = recommender.recommend(userName, 3, 3);
+
+      if (recommendations.empty())
+      {
+        cout << "추천할 만한 영화가 존재하지 않거나, 사용자를 찾을 수 없습니다." << endl;
+      }
+      else
+      {
+        cout << "\n--- [" << userName << "님 맞춤 추천 영화 목록] ---" << endl;
+        for (const auto &movie : recommendations)
+        {
+          cout << movie << endl;
+        }
+      }
       break;
     }
 

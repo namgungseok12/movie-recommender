@@ -9,8 +9,20 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
+
+namespace
+{
+  string formatRating(double score)
+  {
+    stringstream ss;
+    ss << fixed << setprecision(1) << score;
+    return "⭐" + ss.str();
+  }
+}
 
 Menu::Menu(MovieManager &movieMgr, UserManager &userMgr, RatingManager &ratingMgr, Recommender &recom)
     : movieManager(movieMgr), userManager(userMgr), ratingManager(ratingMgr), recommender(recom)

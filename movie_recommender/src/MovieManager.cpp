@@ -3,15 +3,25 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
 namespace
 {
+  string formatRating(double score)
+  {
+    stringstream ss;
+    ss << fixed << setprecision(1) << score;
+    return "⭐" + ss.str();
+  }
+
   void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
   {
+    double avg = ratingManager.getAverageRatingByMovieId(movie.getId());
+
     cout << movie
-         << " | 평점: " << ratingManager.getAverageRatingByMovieId(movie.getId())
+         << " | 평점: " << formatRating(avg)
          << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
   }
 }

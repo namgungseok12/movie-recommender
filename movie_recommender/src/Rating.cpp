@@ -1,6 +1,18 @@
 #include "Rating.h"
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
+
+namespace
+{
+  string formatRating(double score)
+  {
+    stringstream ss;
+    ss << fixed << setprecision(1) << score;
+    return "⭐" + ss.str();
+  }
+}
 
 Rating::Rating()
     : userId(0), movieId(0), score(0.0)
@@ -35,6 +47,6 @@ bool Rating::isValidScore(double score)
 ostream &operator<<(ostream &os, const Rating &rating)
 {
   os << "[Rating] User ID: " << rating.userId
-     << " | Score: " << rating.score;
+     << " | Score: " << formatRating(rating.score);
   return os;
 }

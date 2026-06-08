@@ -26,11 +26,9 @@ int UserManager::addUser(const string &name, const string &email)
 
 const User *UserManager::findByName(const string &name) const
 {
-  User target(0, name, "");
-
   for (const User &user : users)
   {
-    if (user == target)
+    if (user.getName() == name)
     {
       return &user;
     }

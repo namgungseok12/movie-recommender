@@ -4,6 +4,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iomanip>
+#include "Timer.h"
 
 using namespace std;
 
@@ -78,6 +79,7 @@ const Movie *MovieManager::findById(int id) const
 
 void MovieManager::printAllSortedByTitle(const RatingManager &ratingManager) const
 {
+
   if (movies.empty())
   {
     cout << "등록된 영화가 없습니다." << endl;
@@ -96,6 +98,7 @@ void MovieManager::printAllSortedByTitle(const RatingManager &ratingManager) con
 
 void MovieManager::printAllSortedByRating(const RatingManager &ratingManager) const
 {
+  Perf::Timer timer("MovieManager::printAllSortedByRating");
   if (movies.empty())
   {
     cout << "등록된 영화가 없습니다." << endl;

@@ -9,6 +9,7 @@
 #include <map>
 #include <cmath>
 #include <cstdlib>
+#include "Timer.h"
 
 using namespace std;
 
@@ -50,6 +51,7 @@ std::vector<Movie> Recommender::recommend(const string &userName, int k, int n) 
 
 std::vector<Movie> Recommender::recommend(const string &userName, int k, int n, string &reason) const
 {
+  Perf::Timer timer("Recommender::recommend");
   vector<Movie> recommendedMovies;
   reason = "";
 

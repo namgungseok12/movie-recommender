@@ -166,7 +166,7 @@ void Menu::run()
       {
         cout << "\n--- [검색 결과] ---" << endl;
         cout << *foundMovie
-             << " | 평균 평점: " << ratingManager.getAverageRatingByMovieId(foundMovie->getId())
+             << " | 평균 평점: " << formatRating(ratingManager.getAverageRatingByMovieId(foundMovie->getId()))
              << " (" << ratingManager.getRatingCountByMovieId(foundMovie->getId()) << "건)" << endl;
       }
       else
@@ -239,16 +239,19 @@ void Menu::run()
       }
       cout << "\n--- [" << movieTitle << " 평점 목록] ---" << endl;
       ratingManager.printRatingsByMovieId(foundMovie->getId());
-      cout << "평균 평점: " << ratingManager.getAverageRatingByMovieId(foundMovie->getId()) << endl;
+      cout << "평균 평점: " << formatRating(ratingManager.getAverageRatingByMovieId(foundMovie->getId())) << endl;
       break;
     }
     case 9:
     {
       string userName = readLine("추천을 진행할 사용자 이름 입력: ");
-      vector<Movie> recommendations = recommender.recommend(userName, 3, 3);
+
+      string reason;
+      vector<Movie> recommendations = recommender.recommend(userName, 3, 3, reason);
+
       if (recommendations.empty())
       {
-        cout << "추천할 만한 영화가 존재하지 않거나, 사용자를 찾을 수 없습니다." << endl;
+        cout << reason << endl;
       }
       else
       {

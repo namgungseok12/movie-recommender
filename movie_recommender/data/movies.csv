@@ -2,3 +2,100 @@ id,title,genre,releaseYear
 1,Zootopia,Animation,2016
 2,Aladdin,Animation,1992
 3,Inception,Sci-Fi,2010
+4,The Matrix,Sci-Fi,1999
+5,Interstellar,Sci-Fi,2014
+6,Arrival,Sci-Fi,2016
+7,Blade Runner 2049,Sci-Fi,2017
+8,Dune,Sci-Fi,2021
+9,The Martian,Sci-Fi,2015
+10,Avatar,Sci-Fi,2009
+11,Wall E,Animation,2008
+12,Toy Story,Animation,1995
+13,Finding Nemo,Animation,2003
+14,Inside Out,Animation,2015
+15,Coco,Animation,2017
+16,Spirited Away,Animation,2001
+17,Your Name,Animation,2016
+18,Frozen,Animation,2013
+19,Moana,Animation,2016
+20,Shrek,Animation,2001
+21,The Lion King,Animation,1994
+22,Harry Potter,Fantasy,2001
+23,The Lord of the Rings,Fantasy,2001
+24,Pirates of the Caribbean,Adventure,2003
+25,Jurassic Park,Adventure,1993
+26,Indiana Jones,Adventure,1981
+27,National Treasure,Adventure,2004
+28,Jumanji,Adventure,1995
+29,Mission Impossible,Action,1996
+30,Top Gun Maverick,Action,2022
+31,Mad Max Fury Road,Action,2015
+32,John Wick,Action,2014
+33,The Dark Knight,Action,2008
+34,Gladiator,Action,2000
+35,Avengers Endgame,Action,2019
+36,Black Panther,Action,2018
+37,Forrest Gump,Drama,1994
+38,The Shawshank Redemption,Drama,1994
+39,The Pursuit of Happyness,Drama,2006
+40,La La Land,Romance,2016
+41,Titanic,Romance,1997
+42,Before Sunrise,Romance,1995
+43,The Notebook,Romance,2004
+44,About Time,Romance,2013
+45,Notting Hill,Romance,1999
+46,Love Actually,Romance,2003
+47,The Grand Budapest Hotel,Comedy,2014
+48,Home Alone,Comedy,1990
+49,The Intern,Comedy,2015
+50,Mean Girls,Comedy,2004
+51,Legally Blonde,Comedy,2001
+52,School of Rock,Comedy,2003
+53,The Hangover,Comedy,2009
+54,Parasite,Thriller,2019
+55,Gone Girl,Thriller,2014
+56,Shutter Island,Thriller,2010
+57,The Silence of the Lambs,Thriller,1991
+58,Oldboy,Thriller,2003
+59,Memories of Murder,Crime,2003
+60,The Godfather,Crime,1972
+61,Se7en,Crime,1995
+62,Zodiac,Crime,2007
+63,Knives Out,Mystery,2019
+64,Memento,Mystery,2000
+65,The Prestige,Mystery,2006
+66,Get Out,Horror,2017
+67,A Quiet Place,Horror,2018
+68,The Conjuring,Horror,2013
+69,Hereditary,Horror,2018
+70,Train to Busan,Horror,2016
+71,The Social Network,Drama,2010
+72,Whiplash,Drama,2014
+73,Little Women,Drama,2019
+74,Minari,Drama,2020
+75,Everything Everywhere All at Once,Sci-Fi,2022
+76,Spider Man Into the Spider Verse,Animation,2018
+77,Guardians of the Galaxy,Sci-Fi,2014
+78,Doctor Strange,Fantasy,2016
+79,Pan's Labyrinth,Fantasy,2006
+80,The Shape of Water,Fantasy,2017
+81,The Devil Wears Prada,Comedy,2006
+82,Ocean's Eleven,Crime,2001
+83,Catch Me If You Can,Crime,2002
+84,The Truman Show,Drama,1998
+85,Eternal Sunshine,Romance,2004
+86,The Imitation Game,Drama,2014
+87,Up,Animation,2009
+88,Ratatouille,Animation,2007
+89,Soul,Animation,2020
+90,A Star Is Born,Romance,2018
+91,Crazy Rich Asians,Romance,2018
+92,The Proposal,Romance,2009
+93,Edge of Tomorrow,Sci-Fi,2014
+94,Ex Machina,Sci-Fi,2014
+95,Tenet,Sci-Fi,2020
+96,Baby Driver,Action,2017
+97,The Raid,Action,2011
+98,The Bourne Identity,Action,2002
+99,1917,Drama,2019
+100,The King's Speech,Drama,2010

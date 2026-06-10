@@ -22,6 +22,9 @@ public:
     // 두 사용자의 평점 벡터를 비교하여 유사도 점수를 정수로 계산
     static int Similaritycalculate(const std::vector<Rating> &ratingsA, const std::vector<Rating> &ratingsB);
 
-    // 타겟 사용자의 이름을 받아 최종 N개의 맞춤형 추천 영화 객체 배열을 반환(K=이웃 수, N=추천 영화 수)
+    // 기존 추천 함수
     std::vector<Movie> recommend(const std::string &userName, int k, int n) const;
+
+    // 추천 실패 이유 반환 함수
+    std::vector<Movie> recommend(const std::string &userName, int k, int n, std::string &reason) const;
 };

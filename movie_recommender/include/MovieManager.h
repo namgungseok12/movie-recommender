@@ -23,6 +23,7 @@ public:
 
   void printAllSortedByTitle(const RatingManager &ratingManager) const;
   void printAllSortedByRating(const RatingManager &ratingManager) const;
+  void printStatistics(const RatingManager &ratingManager) const;
 
   int size() const override;
 

@@ -1,10 +1,11 @@
 #include "MovieManager.h"
 #include "RatingManager.h"
+#include "Timer.h"
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <iomanip>
-#include "Timer.h"
+#include <vector>
 
 using namespace std;
 
@@ -25,6 +26,20 @@ namespace
          << " | 평점: " << formatRating(avg)
          << " (" << ratingManager.getRatingCountByMovieId(movie.getId()) << "건)";
   }
+
+  void printMovieWithCachedRating(const Movie &movie, double averageRating, int ratingCount)
+  {
+    cout << movie
+         << " | 평점: " << formatRating(averageRating)
+         << " (" << ratingCount << "건)";
+  }
+
+  struct MovieRatingInfo
+  {
+    const Movie *movie;
+    double averageRating;
+    int ratingCount;
+  };
 }
 
 MovieManager::MovieManager() : nextMovieId(1)
@@ -67,7 +82,7 @@ const Movie *MovieManager::findByTitle(const string &title) const
 
 const Movie *MovieManager::findById(int id) const
 {
-  for (const auto &movie : movies)
+  for (const Movie &movie : movies)
   {
     if (movie.getId() == id)
     {
@@ -79,7 +94,6 @@ const Movie *MovieManager::findById(int id) const
 
 void MovieManager::printAllSortedByTitle(const RatingManager &ratingManager) const
 {
-
   if (movies.empty())
   {
     cout << "등록된 영화가 없습니다." << endl;
@@ -99,27 +113,37 @@ void MovieManager::printAllSortedByTitle(const RatingManager &ratingManager) con
 void MovieManager::printAllSortedByRating(const RatingManager &ratingManager) const
 {
   Perf::Timer timer("MovieManager::printAllSortedByRating");
+
   if (movies.empty())
   {
     cout << "등록된 영화가 없습니다." << endl;
     return;
   }
 
-  vector<Movie> sortedMovies = movies;
-  sort(sortedMovies.begin(), sortedMovies.end(), [&ratingManager](const Movie &a, const Movie &b)
-       {
-            const double avgA = ratingManager.getAverageRatingByMovieId(a.getId());
-            const double avgB = ratingManager.getAverageRatingByMovieId(b.getId());
+  vector<MovieRatingInfo> sortedMovies;
+  sortedMovies.reserve(movies.size());
 
-            if (avgA != avgB)
-            {
-                return avgA > avgB;
-            }
-            return a.getTitle() < b.getTitle(); });
-
-  for (const Movie &movie : sortedMovies)
+  for (const Movie &movie : movies)
   {
-    printMovieWithRating(movie, ratingManager);
+    sortedMovies.push_back({
+        &movie,
+        ratingManager.getAverageRatingByMovieId(movie.getId()),
+        ratingManager.getRatingCountByMovieId(movie.getId())});
+  }
+
+  sort(sortedMovies.begin(), sortedMovies.end(),
+       [](const MovieRatingInfo &a, const MovieRatingInfo &b)
+       {
+         if (a.averageRating != b.averageRating)
+         {
+           return a.averageRating > b.averageRating;
+         }
+         return a.movie->getTitle() < b.movie->getTitle();
+       });
+
+  for (const MovieRatingInfo &info : sortedMovies)
+  {
+    printMovieWithCachedRating(*info.movie, info.averageRating, info.ratingCount);
     cout << endl;
   }
 }
@@ -154,7 +178,7 @@ void MovieManager::parseLine(const string &line)
 void MovieManager::onPostLoad()
 {
   int maxId = 0;
-  for (const auto &movie : movies)
+  for (const Movie &movie : movies)
   {
     if (movie.getId() > maxId)
     {
@@ -171,6 +195,6 @@ string MovieManager::getHeader() const
 
 string MovieManager::formatLine(int index) const
 {
-  const auto &m = movies[index];
+  const Movie &m = movies[index];
   return to_string(m.getId()) + "," + m.getTitle() + "," + m.getGenre() + "," + to_string(m.getReleaseYear());
 }

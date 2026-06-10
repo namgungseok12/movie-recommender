@@ -21,6 +21,11 @@ private:
   bool readValidYear(int &year) const;
   bool readValidScore(double &score, const std::string &invalidMessage) const;
 
+  void showStatisticsMenu() const;
+  void showOverallAverageRating() const;
+  void showAverageRatingByGenre() const;
+  void showTopRatedMovies(int topN) const;
+
 public:
   Menu(MovieManager &movieMgr, UserManager &userMgr, RatingManager &ratingMgr, Recommender &recom);
   void run();

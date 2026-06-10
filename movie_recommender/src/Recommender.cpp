@@ -3,13 +3,13 @@
 #include "UserManager.h"
 #include "RatingManager.h"
 #include "User.h"
+#include "Timer.h"
 #include <iostream>
 #include <algorithm>
-#include <set>
-#include <map>
+#include <unordered_set>
+#include <unordered_map>
 #include <cmath>
 #include <cstdlib>
-#include "Timer.h"
 
 using namespace std;
 
@@ -20,18 +20,35 @@ Recommender::Recommender(const MovieManager &movieMgr, const UserManager &userMg
 
 int Recommender::Similaritycalculate(const vector<Rating> &ratingsA, const vector<Rating> &ratingsB)
 {
+  if (ratingsA.empty() || ratingsB.empty())
+  {
+    return -100;
+  }
+
   int commonCount = 0;
   double scoreDiffSum = 0.0;
 
-  for (const auto &r1 : ratingsA)
+  const vector<Rating> &smallerRatings =
+      (ratingsA.size() <= ratingsB.size()) ? ratingsA : ratingsB;
+  const vector<Rating> &largerRatings =
+      (ratingsA.size() <= ratingsB.size()) ? ratingsB : ratingsA;
+
+  unordered_map<int, double> scoreByMovieId;
+  scoreByMovieId.reserve(smallerRatings.size());
+
+  for (const Rating &rating : smallerRatings)
   {
-    for (const auto &r2 : ratingsB)
+    scoreByMovieId[rating.getMovieId()] = rating.getScore();
+  }
+
+  for (const Rating &rating : largerRatings)
+  {
+    auto it = scoreByMovieId.find(rating.getMovieId());
+
+    if (it != scoreByMovieId.end())
     {
-      if (r1.getMovieId() == r2.getMovieId())
-      {
-        commonCount++;
-        scoreDiffSum += std::abs(r1.getScore() - r2.getScore());
-      }
+      commonCount++;
+      scoreDiffSum += std::abs(it->second - rating.getScore());
     }
   }
 
@@ -52,7 +69,13 @@ std::vector<Movie> Recommender::recommend(const string &userName, int k, int n) 
 std::vector<Movie> Recommender::recommend(const string &userName, int k, int n, string &reason) const
 {
   Perf::Timer timer("Recommender::recommend");
+
   vector<Movie> recommendedMovies;
+  if (n > 0)
+  {
+    recommendedMovies.reserve(n);
+  }
+
   reason = "";
 
   const User *targetUser = userManager.findByName(userName);
@@ -72,12 +95,16 @@ std::vector<Movie> Recommender::recommend(const string &userName, int k, int n, 
   }
 
   vector<int> allUserIds = ratingManager.getAllUserIds();
+
   vector<pair<int, int>> similarities;
+  similarities.reserve(allUserIds.size());
 
   for (int otherId : allUserIds)
   {
     if (otherId == targetId)
+    {
       continue; // 자기 자신 제외
+    }
 
     vector<Rating> otherRatings = ratingManager.findByUser(otherId);
     int sim = Similaritycalculate(targetRatings, otherRatings);
@@ -95,29 +122,48 @@ std::vector<Movie> Recommender::recommend(const string &userName, int k, int n, 
     return recommendedMovies;
   }
 
-  // 유사도 상위 K명 선택
-  sort(similarities.begin(), similarities.end(), [](const pair<int, int> &a, const pair<int, int> &b)
-       { return a.second > b.second; });
-
   // 유사 사용자가 K명보다 적으면 있는 만큼만 사용
   int actualK = min(k, static_cast<int>(similarities.size()));
+  if (actualK <= 0)
+  {
+    reason = "추천에 사용할 유사 사용자 수가 0명입니다.";
+    return recommendedMovies;
+  }
+
+  // 유사도 상위 K명만 선택한다. 전체 정렬보다 Top-K 부분 정렬이 더 효율적이다.
+  auto similarityCompare = [](const pair<int, int> &a, const pair<int, int> &b)
+  {
+    if (a.second != b.second)
+    {
+      return a.second > b.second;
+    }
+    return a.first < b.first;
+  };
+
+  partial_sort(similarities.begin(),
+               similarities.begin() + actualK,
+               similarities.end(),
+               similarityCompare);
 
   // 사용자가 이미 본 영화 ID 저장
-  set<int> watchedMovieIds;
-  for (const auto &r : targetRatings)
+  unordered_set<int> watchedMovieIds;
+  watchedMovieIds.reserve(targetRatings.size());
+
+  for (const Rating &rating : targetRatings)
   {
-    watchedMovieIds.insert(r.getMovieId());
+    watchedMovieIds.insert(rating.getMovieId());
   }
 
   // 추천 후보 영화 점수 누적
-  map<int, double> movieScores;
+  unordered_map<int, double> movieScores;
+  movieScores.reserve(movieManager.size());
 
   for (int i = 0; i < actualK; ++i)
   {
     int neighborId = similarities[i].first;
     vector<Rating> neighborRatings = ratingManager.findByUser(neighborId);
 
-    for (const auto &rating : neighborRatings)
+    for (const Rating &rating : neighborRatings)
     {
       // 내가 안 본 영화만 추천 후보로 사용
       if (watchedMovieIds.find(rating.getMovieId()) == watchedMovieIds.end())
@@ -133,12 +179,35 @@ std::vector<Movie> Recommender::recommend(const string &userName, int k, int n, 
     return recommendedMovies;
   }
 
-  // 누적 점수 기준 내림차순 정렬
-  vector<pair<int, double>> sortedScores(movieScores.begin(), movieScores.end());
-  sort(sortedScores.begin(), sortedScores.end(), [](const pair<int, double> &a, const pair<int, double> &b)
-       { return a.second > b.second; });
+  // 누적 점수 기준으로 추천할 상위 N개만 선택한다.
+  vector<pair<int, double>> sortedScores;
+  sortedScores.reserve(movieScores.size());
+
+  for (const auto &entry : movieScores)
+  {
+    sortedScores.push_back(entry);
+  }
 
   int actualN = min(n, static_cast<int>(sortedScores.size()));
+  if (actualN <= 0)
+  {
+    reason = "추천 개수가 0개입니다.";
+    return recommendedMovies;
+  }
+
+  auto scoreCompare = [](const pair<int, double> &a, const pair<int, double> &b)
+  {
+    if (a.second != b.second)
+    {
+      return a.second > b.second;
+    }
+    return a.first < b.first;
+  };
+
+  partial_sort(sortedScores.begin(),
+               sortedScores.begin() + actualN,
+               sortedScores.end(),
+               scoreCompare);
 
   for (int i = 0; i < actualN; ++i)
   {

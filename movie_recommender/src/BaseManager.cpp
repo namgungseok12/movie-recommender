@@ -1,41 +1,94 @@
 #include "BaseManager.h"
+
 #include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using namespace std;
+
+namespace
+{
+    bool isBlankLine(const string &line)
+    {
+        return line.find_first_not_of(" \t\r\n") == string::npos;
+    }
+}
 
 BaseManager::~BaseManager()
 {
 }
 
 // 공통 로딩 템플릿 구현
-void BaseManager::loadFromFile(const std::string &filename)
+void BaseManager::loadFromFile(const string &filename)
 {
-    std::ifstream file(filename);
-    if (!file.is_open()) return;
+    ifstream file(filename);
+
+    if (!file.is_open())
+    {
+        throw runtime_error("파일을 열 수 없습니다: " + filename);
+    }
 
     clear();
-    std::string line;
-    if (std::getline(file, line)) {} // CSV 헤더라인 스킵
 
-    while (std::getline(file, line))
+    string line;
+    int lineNum = 0;
+
+    // CSV 헤더라인 스킵
+    if (getline(file, line))
     {
-        if (line.empty()) continue;
-        parseLine(line);
+        lineNum++;
     }
-    file.close();
+
+    while (getline(file, line))
+    {
+        lineNum++;
+
+        if (isBlankLine(line))
+        {
+            continue;
+        }
+
+        try
+        {
+            parseLine(line);
+        }
+        catch (const invalid_argument &e)
+        {
+            cerr << "[CSV 오류] " << filename << " " << lineNum
+                 << "번 줄 건너뜀: " << e.what() << endl;
+        }
+        catch (const out_of_range &e)
+        {
+            cerr << "[CSV 오류] " << filename << " " << lineNum
+                 << "번 줄 건너뜀: 숫자 범위 초과 - " << e.what() << endl;
+        }
+    }
+
     onPostLoad();
 }
 
 // 공통 저장 템플릿 구현
-void BaseManager::saveToFile(const std::string &filename) const
+void BaseManager::saveToFile(const string &filename) const
 {
-    std::ofstream file(filename);
-    if (!file.is_open()) return;
+    ofstream file(filename);
 
-    file << getHeader() << std::endl;
+    if (!file.is_open())
+    {
+        throw runtime_error("파일을 저장할 수 없습니다: " + filename);
+    }
+
+    file << getHeader() << endl;
+
     for (int i = 0; i < size(); ++i)
     {
-        file << formatLine(i) << std::endl;
+        file << formatLine(i) << endl;
     }
-    file.close();
+
+    if (!file)
+    {
+        throw runtime_error("파일 저장 중 오류가 발생했습니다: " + filename);
+    }
 }
 
 void BaseManager::onPostLoad()

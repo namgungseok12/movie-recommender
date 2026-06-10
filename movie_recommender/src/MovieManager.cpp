@@ -1,11 +1,14 @@
 #include "MovieManager.h"
 #include "RatingManager.h"
 #include "Timer.h"
+
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <iomanip>
 #include <vector>
+#include <stdexcept>
+#include <cctype>
 
 using namespace std;
 
@@ -16,6 +19,47 @@ namespace
     stringstream ss;
     ss << fixed << setprecision(1) << score;
     return "⭐" + ss.str();
+  }
+
+  string trim(const string &str)
+  {
+    size_t start = str.find_first_not_of(" \t\r\n");
+    if (start == string::npos)
+    {
+      return "";
+    }
+
+    size_t end = str.find_last_not_of(" \t\r\n");
+    return str.substr(start, end - start + 1);
+  }
+
+  int parseIntStrict(const string &value, const string &fieldName)
+  {
+    string trimmed = trim(value);
+
+    if (trimmed.empty())
+    {
+      throw invalid_argument(fieldName + " 값이 비어 있습니다.");
+    }
+
+    size_t pos = 0;
+    int result = 0;
+
+    try
+    {
+      result = stoi(trimmed, &pos);
+    }
+    catch (const exception &)
+    {
+      throw invalid_argument(fieldName + " 값은 정수여야 합니다.");
+    }
+
+    if (pos != trimmed.size())
+    {
+      throw invalid_argument(fieldName + " 값에 숫자가 아닌 문자가 포함되어 있습니다.");
+    }
+
+    return result;
   }
 
   void printMovieWithRating(const Movie &movie, const RatingManager &ratingManager)
@@ -166,16 +210,46 @@ void MovieManager::clear()
 void MovieManager::parseLine(const string &line)
 {
   stringstream ss(line);
-  string token;
+  string idToken, title, genre, yearToken, extra;
 
-  getline(ss, token, ',');
-  int id = stoi(token);
-  getline(ss, token, ',');
-  string title = token;
-  getline(ss, token, ',');
-  string genre = token;
-  getline(ss, token, ',');
-  int year = stoi(token);
+  if (!getline(ss, idToken, ',') ||
+      !getline(ss, title, ',') ||
+      !getline(ss, genre, ',') ||
+      !getline(ss, yearToken, ','))
+  {
+    throw invalid_argument("영화 CSV 컬럼 수가 부족합니다.");
+  }
+
+  if (getline(ss, extra, ','))
+  {
+    throw invalid_argument("영화 CSV 컬럼 수가 너무 많습니다.");
+  }
+
+  int id = parseIntStrict(idToken, "영화 ID");
+  int year = parseIntStrict(yearToken, "개봉 연도");
+
+  title = trim(title);
+  genre = trim(genre);
+
+  if (id <= 0)
+  {
+    throw invalid_argument("영화 ID는 1 이상이어야 합니다.");
+  }
+
+  if (title.empty())
+  {
+    throw invalid_argument("영화 제목이 비어 있습니다.");
+  }
+
+  if (genre.empty())
+  {
+    throw invalid_argument("장르가 비어 있습니다.");
+  }
+
+  if (!Movie::isValidYear(year))
+  {
+    throw invalid_argument("개봉 연도 범위가 올바르지 않습니다.");
+  }
 
   movies.push_back(Movie(id, title, genre, year));
 }
@@ -183,6 +257,7 @@ void MovieManager::parseLine(const string &line)
 void MovieManager::onPostLoad()
 {
   int maxId = 0;
+
   for (const Movie &movie : movies)
   {
     if (movie.getId() > maxId)
@@ -190,6 +265,7 @@ void MovieManager::onPostLoad()
       maxId = movie.getId();
     }
   }
+
   nextMovieId = maxId + 1;
 }
 

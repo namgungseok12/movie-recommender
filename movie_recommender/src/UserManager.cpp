@@ -1,8 +1,54 @@
 #include "UserManager.h"
+
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 using namespace std;
+
+namespace
+{
+  string trim(const string &str)
+  {
+    size_t start = str.find_first_not_of(" \t\r\n");
+    if (start == string::npos)
+    {
+      return "";
+    }
+
+    size_t end = str.find_last_not_of(" \t\r\n");
+    return str.substr(start, end - start + 1);
+  }
+
+  int parseIntStrict(const string &value, const string &fieldName)
+  {
+    string trimmed = trim(value);
+
+    if (trimmed.empty())
+    {
+      throw invalid_argument(fieldName + " 값이 비어 있습니다.");
+    }
+
+    size_t pos = 0;
+    int result = 0;
+
+    try
+    {
+      result = stoi(trimmed, &pos);
+    }
+    catch (const exception &)
+    {
+      throw invalid_argument(fieldName + " 값은 정수여야 합니다.");
+    }
+
+    if (pos != trimmed.size())
+    {
+      throw invalid_argument(fieldName + " 값에 숫자가 아닌 문자가 포함되어 있습니다.");
+    }
+
+    return result;
+  }
+}
 
 UserManager::UserManager() : nextUserId(1)
 {
@@ -33,6 +79,7 @@ const User *UserManager::findByName(const string &name) const
       return &user;
     }
   }
+
   return nullptr;
 }
 
@@ -45,6 +92,7 @@ const User *UserManager::findById(int id) const
       return &user;
     }
   }
+
   return nullptr;
 }
 
@@ -75,14 +123,39 @@ void UserManager::clear()
 void UserManager::parseLine(const string &line)
 {
   stringstream ss(line);
-  string token;
+  string idToken, name, email, extra;
 
-  getline(ss, token, ',');
-  int id = stoi(token);
-  getline(ss, token, ',');
-  string name = token;
-  getline(ss, token, ',');
-  string email = token;
+  if (!getline(ss, idToken, ',') ||
+      !getline(ss, name, ',') ||
+      !getline(ss, email, ','))
+  {
+    throw invalid_argument("사용자 CSV 컬럼 수가 부족합니다.");
+  }
+
+  if (getline(ss, extra, ','))
+  {
+    throw invalid_argument("사용자 CSV 컬럼 수가 너무 많습니다.");
+  }
+
+  int id = parseIntStrict(idToken, "사용자 ID");
+
+  name = trim(name);
+  email = trim(email);
+
+  if (id <= 0)
+  {
+    throw invalid_argument("사용자 ID는 1 이상이어야 합니다.");
+  }
+
+  if (name.empty())
+  {
+    throw invalid_argument("사용자 이름이 비어 있습니다.");
+  }
+
+  if (email.empty())
+  {
+    throw invalid_argument("이메일이 비어 있습니다.");
+  }
 
   users.push_back(User(id, name, email));
 }
@@ -90,6 +163,7 @@ void UserManager::parseLine(const string &line)
 void UserManager::onPostLoad()
 {
   int maxId = 0;
+
   for (const auto &user : users)
   {
     if (user.getId() > maxId)
@@ -97,6 +171,7 @@ void UserManager::onPostLoad()
       maxId = user.getId();
     }
   }
+
   nextUserId = maxId + 1;
 }
 

@@ -129,6 +129,10 @@ void Menu::run()
     cout << endl
          << "[ 추천 시스템 ]" << endl;
     cout << "9. 추천 영화 보기" << endl;
+
+    cout << endl
+         << "[ 통계 ]" << endl;
+    cout << "10. 통계 보기" << endl;
     cout << "0. 종료" << endl;
 
     cout << endl
@@ -263,6 +267,9 @@ void Menu::run()
       }
       break;
     }
+    case 10:
+      movieManager.printStatistics(ratingManager);
+      break;
     case 0:
       cout << "프로그램을 종료합니다." << endl;
       break;
